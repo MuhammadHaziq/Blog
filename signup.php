@@ -21,7 +21,7 @@ if($_POST){
     $name=trim($_POST['name']);
     $email=trim($_POST['email']);
     $password=trim($_POST['password']);
-    $status=trim($_POST['status']);
+    $_POST['status']=$status;
     $flag=0;
 
     $db=new db();
@@ -136,9 +136,9 @@ if($_POST){
 
     <label for="Status">Status:</label>
 
-    <input type="radio" id="status" name="status" placeholder="Enter Status" value="<?php echo $status; ?>">Admin
-    <input type="radio" id="status" name="status" placeholder="Enter Status" value="<?php echo $status; ?>">Visitor
-    <input type="radio" id="status" name="status" placeholder="Enter Status" value="<?php echo $status; ?>">Moderator
+    <input type="radio" id="Status" name="status" placeholder="Enter Status" value="<?php echo $status; ?> " required>Admin
+    <input type="radio" id="Status" name="status" placeholder="Enter Status" value="<?php echo $status; ?>" required>Visitor
+    <input type="radio" id="Status" name="status" placeholder="Enter Status" value="<?php echo $status; ?>" required>Moderator
     <p><?php echo $e_status ;?></p>
     <input type="submit" class="btn btn-primary" value="Login">
 

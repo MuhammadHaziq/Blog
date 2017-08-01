@@ -2,65 +2,60 @@
 /**
  * Created by PhpStorm.
  * User: MUHAMMAD HAJIQ
- * Date: 7/29/2017
- * Time: 12:53 AM
+ * Date: 8/1/2017
+ * Time: 11:02 PM
  */
 include "includes/db.php";
-include "includes/header.php";
+$db=new db();
+//var_dump($db->update("posts",1,"haziq","hello"));
 
-session_start();
-//var_dump($_SESSION['email']);
-
-
-if($_SESSION['login']){}else{
-    header("location:login.php");
-}
-$username="";
-$userid="";
 $title = "";
 $text = "";
-$error = "";
+
+$e_title = "";
+$e_text = "";
+
+
 if($_POST){
     $title = trim($_POST['title']);
-    $text =trim($_POST['text']);
-    $db = new db();
-    $flag=1;
-    if(!empty($text)&&!empty($title)) {
-        $result = $db->select("posts");
-        $flag=1;
-        while ($row = $result->fetch()) {
-            if ($row['title'] !== $title && $row['text'] !== $text) {
-                   $result1= $db->select("users");
-                    while($row1 = $result1->fetch()){
-                        if($row1['email']==$_SESSION['email']){
-                            $userid = $row1['id'];
-                            $username=$row1['name'];
-                        }
-                    }
-
-                $result = $db->posts($title , $text ,$userid, $username );
-                header("location:blog.php");
+    $text = trim($_POST['text']);
 
 
-                 break;
-            }else{
-                $flag=0;
+    $flag = 0;
 
-              }
-        }
-
-
-
-
-    } if($flag == 0){
-        $error='<div class="alert alert-danger alert-dismissable">
-            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>Please change the Email:</div>
-            <div id="returnVal" style="display:none;">false</div>';
-
-
+    if(empty($title)){
+        $e_title = "Please enter title";
+        $flag = 1;
     }
 
-}?>
+    if(empty($text)){
+        $flag = 1;
+        $e_text ="enter text";
+    }
+
+
+    if($flag == 0){
+        $db = new db();
+        $result = $db->update('posts',$_GET['id'],$title,$text);
+        header("location:blog.php");
+    }
+}else{
+    if(isset($_GET["id"])){
+        if(is_numeric($_GET["id"])){
+            $db = new db();
+            if($db->alreadyexist("posts",$_GET["id"])){
+                $result = $db->select('posts');
+                while($row = $result->fetch()) {
+                        if($row['id']==$_GET['id']) {
+                            $title = $row["title"];
+                            $text = $row["text"];
+                        }
+                }
+            }
+        }
+    }
+}
+?>
 <!doctype html>
 <html lang="en">
 <head>
@@ -106,18 +101,18 @@ if($_POST){
     <h4>POST</h4>
     <div class="input-group">
         <span class="input-group-addon"><i class="glyphicon glyphicon-pencil"></i></span>
-        <input id="title" type="text" class="form-control" name="title" placeholder="Title">
+        <input id="title" type="text" class="form-control" name="title" placeholder="Title" value="<?php echo $title; ?>">
     </div>
-
+<p><?php echo $e_title;?></p>
     <div class="input-group">
-    <label for="post"> Post:</label>
-    <textarea cols="75" rows="25" id="post" name="text" placeholder="Post"required></textarea>
+        <label for="post"> Post:</label>
+        <textarea cols="75" rows="25" id="post" name="text" placeholder="Post" required><?php echo $text; ?></textarea>
     </div>
-    <?php echo $error;?>
+    <p><?php echo $e_text;?></p>
     <div class="input-group-btn">
         <button class="btn btn-primary pull right" type="submit">Post
         </button>
-     </div>
+    </div>
 </form>
 
 </body>

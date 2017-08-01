@@ -43,6 +43,9 @@ $error="";
                             <p>
                                 <i class="fa fa-user"></i> by <a href="#"><?php echo $row['username'];?></a>
                                 | <i class="fa fa-calendar"></i> <?php echo $row['createdat'];?>
+                                |<a href="comment1.php?id=<?php echo $row['id'];?>"><i class="fa fa-user">Comment</i></a>
+                                |<a href="deletepost.php?id=<?php echo $row['id'];?>"><i class="fa fa-recycle">Delete</i></a>
+                                |<a href="Updatepost.php?id=<?php echo $row['id'];?>"><i class="fa fa-recycle">Update</i></a>
                                 |<a href="www.facebook.com"><span i class="fa fa-facebook">facebook</span></a>
                                 <a href="www.twitter.com"><span i class="fa fa-twitter">twitter</span></a>
                                 <a href="www.gmail.com"><span i class="fa fa-envelope">email</span></a>
@@ -97,23 +100,8 @@ while($row1 = $result1->fetch()) {?>
             </div >
         </div >
     </div >
-<?php }?>
-<div class="well" style="width: 900px">
-    <small>Leave a Comment:</small>
-    <form method="post" action="comment.php">
-        <div class="input-group">
-            <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
-            <input id="comment" type="text" class="form-control" warp="hard" name="comment" placeholder="Enter Comment" required>
-        </div>
-        <div class="input-group-btn">
-            <button class="btn btn-primary" type="submit">
-                <i class="glyphicon glyphicon-log-in"> Comment </i>
-            </button>
-        </div>
-        <?php echo $error;?>
-    </form>
-</div>
-<?php
+<?php }
+
 include "includes/footer.php";
 ?>
 <!--<a href="logout.php"><input type="submit"  class="btn btn-primary" value="logout"></a>-->

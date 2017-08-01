@@ -73,11 +73,11 @@ class db{
 
      public function selectbyemail($tablename, $email){
          $this->connection();
-         $query="SELECT * FROM $tablename WHERE email = $email";
-         $result= $this->conn->prepare($query);
-         $result->execute();
-         $result->setFetchMode(PDO::FETCH_ASSOC);
-         return $result->execute();
+         $query= $this->conn->prepare("SELECT * FROM $tablename WHERE email = :email");
+         $query->bindParam(':email' ,$email , PDO::PARAM_STR);
+         $query->execute();
+         $query->fetchAll(PDO::FETCH_ASSOC);
+         return $query->execute();
      }
      public function alreadyexist($tablename , $id){
          $this->connection();
@@ -103,7 +103,18 @@ class db{
          $query->bindParam(':id', $id, PDO::PARAM_INT);
           return $query->execute();
      }
-     /*public function update($table , $id ,$title , $text){
+     public function comment1($comment , $username, $userid , $postid){
+         $this->connection();
+    $query = $this->conn->prepare("INSERT INTO comment(comment , username, userid , postid) VALUES (:comment , :username ,:userid , :postid) ");
+    $query->bindparam("comment", $comment, PDO::PARAM_STR);
+    $query->bindparam("username", $username, PDO::PARAM_STR);
+    $query->bindparam("userid", $userid, PDO::PARAM_STR);
+    $query->bindparam("postid",$postid , PDO::PARAM_STR);
+    return $query->execute();
+}
+
+
+     public function update($table , $id ,$title , $text){
          $this->connection();
          $sql = "UPDATE $table SET title = :title, text = :text  
             WHERE id = :id";
@@ -113,5 +124,5 @@ class db{
          $query->bindParam(':id', $id, PDO::PARAM_STR);
           return $query->execute();
 
-     }*/
+     }
 }
